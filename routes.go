@@ -21,5 +21,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	r.PUT("api/auth/forum/prize/:id", controller.Prize)
 	r.PUT("api/auth/forum/top/:id", controller.TopSolve)
 	r.DELETE("api/auth/forum/delete/:id", controller.RemovePost)
+
+	r.GET("api/auth/msg/list", middleware.AuthMiddleware(), controller.ShowMsgList)
 	return r
 }
