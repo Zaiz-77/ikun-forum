@@ -8,6 +8,7 @@ import (
 
 func CollectRoute(r *gin.Engine) *gin.Engine {
 	r.Use(middleware.CROSMiddleware())
+	// user
 	r.POST("/api/auth/register", controller.Register)
 	r.POST("/api/auth/login", controller.Login)
 	r.GET("api/auth/info", middleware.AuthMiddleware(), controller.Info)
@@ -16,12 +17,15 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	r.PUT("api/auth/update", controller.EditInfo)
 	r.DELETE("api/auth/delete/:tel", controller.RemoveUser)
 
+	// forum
 	r.GET("api/auth/forum", controller.ShowPostList)
 	r.POST("api/auth/forum/publish", middleware.AuthMiddleware(), controller.Publish)
 	r.PUT("api/auth/forum/prize/:id", controller.Prize)
 	r.PUT("api/auth/forum/top/:id", controller.TopSolve)
 	r.DELETE("api/auth/forum/delete/:id", controller.RemovePost)
 
+	// message
 	r.GET("api/auth/msg/list", middleware.AuthMiddleware(), controller.ShowMsgList)
+	r.POST("api/auth/msg/send/:id", middleware.AuthMiddleware(), controller.SendMsg)
 	return r
 }
