@@ -1,16 +1,18 @@
 package util
 
 import (
-	"math/rand"
-	"time"
+	"github.com/jinzhu/gorm"
+	"zaizwk/ginessential/model"
 )
 
-func RandomString(n int) string {
-	var signs = []byte("QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm")
-	res := make([]byte, n)
-	rand.Seed(time.Now().Unix())
-	for i := range res {
-		res[i] = signs[rand.Intn(len(signs))]
-	}
-	return string(res)
+func IsTelExist(db *gorm.DB, tel string) bool {
+	var user model.User
+	db.Where("tel = ?", tel).First(&user)
+	return user.ID != 0
+}
+
+func IsNameExist(db *gorm.DB, name string) bool {
+	var user model.User
+	db.Where("name = ?", name).First(&user)
+	return user.ID != 0
 }

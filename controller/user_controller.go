@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
@@ -51,14 +50,14 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// 如果账户没有传入，给一个10位随机账户
-	if len(name) == 0 {
-		name = util.RandomString(10)
+	if util.IsNameExist(DB, name) {
+		response.Response(c, http.StatusUnprocessableEntity, 422, nil, "用户名已经存在")
+		return
 	}
 
 	// 手机号
-	if isTelExist(DB, tel) {
-		response.Response(c, http.StatusUnprocessableEntity, 422, nil, "该用户已经存在")
+	if util.IsTelExist(DB, tel) {
+		response.Response(c, http.StatusUnprocessableEntity, 422, nil, "手机号码已经存在")
 		return
 	}
 	// 创建用户
@@ -105,7 +104,7 @@ func Login(c *gin.Context) {
 	}
 
 	// 手机
-	if !isTelExist(DB, tel) {
+	if !util.IsTelExist(DB, tel) {
 		response.Response(c, http.StatusUnprocessableEntity, 422, nil, "该用户不存在")
 		return
 	}
@@ -166,10 +165,4 @@ func RemoveUser(c *gin.Context) {
 	DB.Where("user_tel = ?", tel).Delete(&model.Post{})
 	DB.Unscoped().Delete(&model.User{}, user.ID)
 	response.Success(c, gin.H{"flag": true, "tel": tel}, "删除成功!")
-}
-
-func isTelExist(db *gorm.DB, tel string) bool {
-	var user model.User
-	db.Where("tel = ?", tel).First(&user)
-	return user.ID != 0
 }

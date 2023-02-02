@@ -32,8 +32,6 @@ func Publish(c *gin.Context) {
 	now = temp.(model.User)
 	post := model.Post{
 		User:     now,
-		UserName: now.Name,
-		UserTel:  now.Tel,
 		Title:    title,
 		Content:  content,
 		PrizeCnt: 0,

@@ -15,7 +15,7 @@ func ShowMsgList(c *gin.Context) {
 	var msg []model.Message
 	DB.Preload("ToUser").Preload("FromUser").
 		Where("to_user_tel = ?", now.Tel).
-		Order("created_at DESC").Find(&msg)
+		Order("created_at ASC").Find(&msg)
 
 	mp := make(map[string][]dto.MsgDto)
 	for _, m := range msg {
@@ -30,9 +30,11 @@ func SendMsg(c *gin.Context) {
 	now := t.(model.User)
 
 	var toUser model.User
-	DB.First(&toUser, c.Param("id"))
+	DB.Where("name = ?", c.Param("name")).First(&toUser)
 
-	content := c.PostForm("content")
+	var req model.Message
+	_ = c.Bind(&req)
+	content := req.Content
 	message := model.Message{
 		FromUser: now,
 		ToUser:   toUser,
