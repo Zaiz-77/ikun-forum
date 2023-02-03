@@ -9,13 +9,13 @@ import (
 func CollectRoute(r *gin.Engine) *gin.Engine {
 	r.Use(middleware.CROSMiddleware())
 	// user
-	r.POST("/api/auth/register", controller.Register)
-	r.POST("/api/auth/login", controller.Login)
-	r.GET("api/auth/info", middleware.AuthMiddleware(), controller.Info)
-	r.GET("api/auth/info/:tel", controller.ShowSpecificInfo)
-	r.GET("api/auth/list", controller.ShowUserList)
-	r.PUT("api/auth/update", controller.EditInfo)
-	r.DELETE("api/auth/delete/:tel", controller.RemoveUser)
+	r.POST("/api/auth/user/register", controller.Register)
+	r.POST("/api/auth/user/login", controller.Login)
+	r.GET("api/auth/user/info", middleware.AuthMiddleware(), controller.Info)
+	r.GET("api/auth/user/info/:tel", controller.ShowSpecificInfo)
+	r.GET("api/auth/user/list", controller.ShowUserList)
+	r.PUT("api/auth/user/update", controller.EditInfo)
+	r.DELETE("api/auth/user/delete/:tel", controller.RemoveUser)
 
 	// forum
 	r.GET("api/auth/forum", controller.ShowPostList)
@@ -27,5 +27,7 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	// message
 	r.GET("api/auth/msg/list", middleware.AuthMiddleware(), controller.ShowMsgList)
 	r.POST("api/auth/msg/send/:name", middleware.AuthMiddleware(), controller.SendMsg)
+	r.PUT("api/auth/msg/read", controller.ReadMsg)
+	r.GET("api/auth/msg/chat/:name", middleware.AuthMiddleware(), controller.ShowChatFace)
 	return r
 }

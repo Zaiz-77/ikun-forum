@@ -11,6 +11,8 @@ type MsgDto struct {
 	ToUserName   string    `json:"toUserName"`
 	CreatedAt    time.Time `json:"createdAt"`
 	Content      string    `json:"content"`
+	IsRead       bool      `json:"isRead"`
+	IsUser       bool      `json:"isUser"`
 }
 
 func ToMsgDto(msg model.Message) MsgDto {
@@ -20,5 +22,6 @@ func ToMsgDto(msg model.Message) MsgDto {
 		ToUserName:   msg.ToUser.Name,
 		CreatedAt:    msg.CreatedAt,
 		Content:      msg.Content,
+		IsRead:       msg.IsRead,
 	}
 }
