@@ -29,5 +29,8 @@ func CollectRoute(r *gin.Engine) *gin.Engine {
 	r.POST("api/auth/msg/send/:name", middleware.AuthMiddleware(), controller.SendMsg)
 	r.PUT("api/auth/msg/read", controller.ReadMsg)
 	r.GET("api/auth/msg/chat/:name", middleware.AuthMiddleware(), controller.ShowChatFace)
+
+	// friend
+	r.GET("api/auth/friend/list", middleware.AuthMiddleware(), controller.FriendList)
 	return r
 }
