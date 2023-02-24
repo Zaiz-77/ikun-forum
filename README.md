@@ -1,3 +1,3 @@
 # GinEssential
-ikun交流社区...
-只因你太美
+## ikun交流社区
+### 只因你太美
