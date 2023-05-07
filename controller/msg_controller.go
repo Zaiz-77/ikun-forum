@@ -6,6 +6,7 @@ import (
 	"zaizwk/ginessential/dto"
 	"zaizwk/ginessential/model"
 	"zaizwk/ginessential/response"
+	"zaizwk/ginessential/util"
 )
 
 func ReadMsg(c *gin.Context) {
@@ -56,6 +57,8 @@ func ShowChatFace(c *gin.Context) {
 		if now.Tel == m.FromUserTel {
 			cur.IsUser = true
 		}
+		decrypted, _ := util.Decrypt(m.Key, cur.Content)
+		cur.Content = decrypted
 		msgDTO = append(msgDTO, cur)
 	}
 
@@ -73,11 +76,14 @@ func SendMsg(c *gin.Context) {
 	var req model.Message
 	_ = c.Bind(&req)
 	content := req.Content
+	var key, _ = util.GenerateRandomKey()
+	ciphertext, _ := util.Encrypt(key, content)
 	message := model.Message{
 		FromUser: now,
 		ToUser:   toUser,
-		Content:  content,
+		Content:  ciphertext,
 		IsRead:   false,
+		Key:      key,
 	}
 	DB.Save(&message)
 	response.Success(c, gin.H{"msg": dto.ToMsgDto(message)}, "发送消息成功!")

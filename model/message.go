@@ -11,4 +11,5 @@ type Message struct {
 	ToUserTel   string `gorm:"varchar(11);not null"`
 	Content     string `gorm:"not null"`
 	IsRead      bool   `gorm:"default:false"`
+	Key         string `gorm:"not null"`
 }
